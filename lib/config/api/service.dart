@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:dio_http_formatter/dio_http_formatter.dart';
 import 'package:shipment/models/shipment_model.dart';
 
 class ApiServices {
@@ -16,22 +17,24 @@ class ApiServices {
   ApiServices() {
     options = getOptions();
     dio = Dio(options);
+    dio.interceptors.add(HttpFormatter());
   }
 
   BaseOptions getOptions() => Dio().options
     ..baseUrl = baseUrl
     ..connectTimeout = Duration(seconds: 30)
-    ..receiveTimeout = Duration(seconds: 30)
-    ..receiveDataWhenStatusError = true
-    ..headers = {
-      'Content-Type': 'application/json',
-      'Accept': '*/*',
-    }
-    ..followRedirects = true;
+    ..receiveTimeout = Duration(seconds: 30);
 
   Future<ShipmentModel> fetchShipment(String id) async {
     try {
-      final response = await dio.get(getShipment(id));
+      final response = await dio.get(
+        getShipment(id),
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
 
       if (response.statusCode == 200) {
         if (response.data.status) {
@@ -49,7 +52,14 @@ class ApiServices {
 
   Future<List<ShipmentModel>> fetchShipments() async {
     try {
-      final response = await dio.get(getShipments());
+      final response = await dio.get(
+        getShipments(),
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
 
       if (response.statusCode == 200) {
         if (response.data.status) {
@@ -93,11 +103,19 @@ class ApiServices {
     required String status,
   }) async {
     try {
-      final response = await dio.post(create, data: {
-        'item': item,
-        'expedition': expedition,
-        'status': status,
-      });
+      final response = await dio.post(
+        create,
+        data: {
+          'item': item,
+          'expedition': expedition,
+          'status': status,
+        },
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
 
       if (response.statusCode == 200) {
         if (response.data.status) {
@@ -118,9 +136,17 @@ class ApiServices {
     required String status,
   }) async {
     try {
-      final response = await dio.put(update(id), data: {
-        'status': status,
-      });
+      final response = await dio.put(
+        update(id),
+        data: {
+          'status': status,
+        },
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
 
       if (response.statusCode == 200) {
         if (response.data.status) {
@@ -141,10 +167,47 @@ class ApiServices {
     required String description,
   }) async {
     try {
-      final response = await dio.post(createHistory(id), data: {
+      final response = await dio.post(
+        createHistory(id),
+        data: {
+          'description': description,
+          'time': DateTime.now().toIso8601String(),
+        },
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+      if (response.statusCode == 200) {
+        if (response.data.status) {
+          return Future.value(true);
+        } else {
+          return Future.error('Failed to create history');
+        }
+      } else {
+        return Future.error('Failed to create history');
+      }
+    } catch (e) {
+      return Future.error(e);
+    }
+  }
+
+  Future<bool> addHistoryWithImage({
+    required String id,
+    required String description,
+    required String imagePath,
+  }) async {
+    try {
+      FormData formData = FormData.fromMap({
         'description': description,
         'time': DateTime.now().toIso8601String(),
+        'image': await MultipartFile.fromFile(imagePath),
       });
+      final response = await dio.post(
+        createHistory(id),
+        data: formData,
+      );
       if (response.statusCode == 200) {
         if (response.data.status) {
           return Future.value(true);
