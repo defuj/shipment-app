@@ -1,0 +1,170 @@
+import 'package:flutter/material.dart';
+import 'package:shipment/config/api/service.dart';
+import 'package:shipment/config/routes.dart';
+import 'package:shipment/models/shipment_model.dart';
+
+class ShipmentManagement extends StatefulWidget {
+  const ShipmentManagement({super.key});
+
+  @override
+  State<ShipmentManagement> createState() => _ShipmentManagementState();
+}
+
+class _ShipmentManagementState extends State<ShipmentManagement> {
+  final apiServices = ApiServices();
+  bool isLoading = true;
+  List<ShipmentModel> shipments = [];
+  String? errorMessage;
+
+  Future<void> loadShipments() async {
+    if (!isLoading) {
+      setState(() {
+        isLoading = true;
+      });
+    }
+
+    try {
+      var result = await apiServices.fetchShipments();
+      setState(() {
+        shipments = result;
+      });
+    } catch (e) {
+      setState(() {
+        errorMessage = e.toString();
+        shipments = [
+          ShipmentModel(
+            id: 'JNT09864554',
+            item: 'Kadang Marmut',
+            expedition: 'JNT Express',
+            status: 'IN PROCESS',
+          ),
+          ShipmentModel(
+            id: 'JNT09862323',
+            item: 'Buku Pintar',
+            expedition: 'JNT Express',
+            status: 'ON DELIVERY',
+          ),
+        ];
+      });
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    loadShipments();
+    super.initState();
+  }
+
+  Widget handleLoading() {
+    return Center(
+      child: CircularProgressIndicator(
+        color: Colors.lightBlue,
+      ),
+    );
+  }
+
+  Widget handleEmpty() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(
+            'assets/images/delivery.jpg',
+            width: 300,
+          ),
+          const Text(
+            'No shipments found',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            'Add a new shipment to get started',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget handleShipments() {
+    return ListView.builder(
+      itemCount: shipments.length,
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        final shipment = shipments[index];
+        return ListTile(
+          leading: const Icon(
+            Icons.local_shipping,
+            color: Colors.blue,
+            size: 40,
+          ),
+          title: Text(
+            '${shipment.item} - ${shipment.id}',
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          subtitle: Text(
+            '${shipment.expedition} - ${shipment.status}',
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              Routes.shipmentUpdate,
+              arguments: shipment,
+            );
+          },
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        scrolledUnderElevation: 0,
+        backgroundColor: Colors.white,
+        title: Text(
+          'Shipment Management',
+          style: TextStyle(
+            color: Colors.black87,
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+      body: isLoading
+          ? handleLoading()
+          : shipments.isEmpty
+              ? handleEmpty()
+              : handleShipments(),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blue,
+        onPressed: () {
+          Navigator.pushNamed(context, Routes.shipmentCreate);
+        },
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+}
