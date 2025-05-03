@@ -7,10 +7,9 @@ class ApiServices {
   static String delete(String id) => '/shipment/$id';
   static String update(String id) => '/shipment/$id';
   static String create = '/shipment';
-  static String getShipments() => '/shipment-list';
+  static String getShipments() => '/shipment/list';
   static String getShipment(String id) => '/shipment/$id';
   static String getShipmentStatus = '/shipment-status';
-  // Add more endpoints as needed
 
   late Dio dio;
   late BaseOptions options;
