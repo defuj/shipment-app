@@ -1,9 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:dio_http_formatter/dio_http_formatter.dart';
 import 'package:shipment/models/shipment_model.dart';
 
 class ApiServices {
-  static const String baseUrl = 'https://api.example.com';
+  static const String baseUrl = 'http://192.168.18.144:8000';
   static String createHistory(String id) => '/shipment/$id/history';
   static String delete(String id) => '/shipment/$id';
   static String update(String id) => '/shipment/$id';
@@ -17,13 +16,23 @@ class ApiServices {
   ApiServices() {
     options = getOptions();
     dio = Dio(options);
-    dio.interceptors.add(HttpFormatter());
+    // dio.interceptors.add(HttpFormatter());
+    // dio.httpClientAdapter = IOHttpClientAdapter(
+    //   createHttpClient: () {
+    //     final client = HttpClient()
+    //       ..badCertificateCallback =
+    //           (X509Certificate cert, String host, int port) => true;
+    //     return client;
+    //   },
+    // );
   }
 
   BaseOptions getOptions() => Dio().options
     ..baseUrl = baseUrl
     ..connectTimeout = Duration(seconds: 30)
-    ..receiveTimeout = Duration(seconds: 30);
+    ..receiveTimeout = Duration(seconds: 30)
+    ..receiveDataWhenStatusError = true
+    ..followRedirects = true;
 
   Future<ShipmentModel> fetchShipment(String id) async {
     try {
@@ -36,14 +45,10 @@ class ApiServices {
         ),
       );
 
-      if (response.statusCode == 200) {
-        if (response.data.status) {
-          return Future.value(ShipmentModel.fromJson(response.data.data));
-        } else {
-          return Future.error('Shipment not found');
-        }
+      if (response.data['status']) {
+        return Future.value(ShipmentModel.fromJson(response.data['data']));
       } else {
-        return Future.error('Failed to load shipment');
+        return Future.error('Shipment not found');
       }
     } catch (e) {
       return Future.error(e);
@@ -52,27 +57,19 @@ class ApiServices {
 
   Future<List<ShipmentModel>> fetchShipments() async {
     try {
-      final response = await dio.get(
-        getShipments(),
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        ),
-      );
+      final response = await dio.get(getShipments());
 
-      if (response.statusCode == 200) {
-        if (response.data.status) {
-          return Future.value(
-            (response.data.data as List)
-                .map((e) => ShipmentModel.fromJson(e))
-                .toList(),
-          );
+      if (response.data['success']) {
+        if (response.data['data'] == null) {
+          return Future.value([]);
         } else {
-          return Future.error('No shipments found');
+          var result = List<ShipmentModel>.from(
+            response.data['data'].map((x) => ShipmentModel.fromJson(x)),
+          );
+          return Future.value(result);
         }
       } else {
-        return Future.error('Failed to load shipments');
+        return Future.error('No shipments found');
       }
     } catch (e) {
       return Future.error(e);
@@ -82,13 +79,8 @@ class ApiServices {
   Future<bool> deleteShipments(String id) async {
     try {
       final response = await dio.delete(delete(id));
-
-      if (response.statusCode == 200) {
-        if (response.data.status) {
-          return Future.value(true);
-        } else {
-          return Future.error('Failed to delete shipment');
-        }
+      if (response.data['success']) {
+        return Future.value(true);
       } else {
         return Future.error('Failed to delete shipment');
       }
@@ -117,12 +109,8 @@ class ApiServices {
         ),
       );
 
-      if (response.statusCode == 200) {
-        if (response.data.status) {
-          return Future.value(true);
-        } else {
-          return Future.error('Failed to create shipment');
-        }
+      if (response.data['success']) {
+        return Future.value(true);
       } else {
         return Future.error('Failed to create shipment');
       }
@@ -148,12 +136,8 @@ class ApiServices {
         ),
       );
 
-      if (response.statusCode == 200) {
-        if (response.data.status) {
-          return Future.value(true);
-        } else {
-          return Future.error('Failed to update shipment');
-        }
+      if (response.data['success']) {
+        return Future.value(true);
       } else {
         return Future.error('Failed to update shipment');
       }
@@ -179,12 +163,9 @@ class ApiServices {
           },
         ),
       );
-      if (response.statusCode == 200) {
-        if (response.data.status) {
-          return Future.value(true);
-        } else {
-          return Future.error('Failed to create history');
-        }
+
+      if (response.data['success']) {
+        return Future.value(true);
       } else {
         return Future.error('Failed to create history');
       }
@@ -208,12 +189,9 @@ class ApiServices {
         createHistory(id),
         data: formData,
       );
-      if (response.statusCode == 200) {
-        if (response.data.status) {
-          return Future.value(true);
-        } else {
-          return Future.error('Failed to create history');
-        }
+
+      if (response.data['status']) {
+        return Future.value(true);
       } else {
         return Future.error('Failed to create history');
       }

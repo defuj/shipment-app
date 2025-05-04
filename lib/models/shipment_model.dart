@@ -3,32 +3,25 @@ class ShipmentModel {
   String status;
   String item;
   String expedition;
-  List<ShipmentHistoryModel> history;
+  List<ShipmentHistoryModel>? history;
 
   ShipmentModel({
     required this.id,
     required this.status,
     required this.item,
     required this.expedition,
-    this.history = const [],
+    this.history,
   });
 
   ShipmentModel.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        status = json['status'],
-        item = json['item'],
-        expedition = json['expedition'],
-        history = (json['history'] as List)
-            .map((i) => ShipmentHistoryModel.fromJson(i))
-            .toList();
-
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'status': status,
-        'item': item,
-        'expedition': expedition,
-        'history': history.map((i) => i.toJson()).toList(),
-      };
+      : id = json['id'].toString(),
+        status = json['status'].toString(),
+        item = json['item'].toString(),
+        expedition = json['expedition'].toString(),
+        history = json['history'] != null
+            ? List<ShipmentHistoryModel>.from(
+                json['history'].map((x) => ShipmentHistoryModel.fromJson(x)))
+            : [];
 }
 
 class ShipmentHistoryModel {
@@ -43,13 +36,7 @@ class ShipmentHistoryModel {
   });
 
   ShipmentHistoryModel.fromJson(Map<String, dynamic> json)
-      : description = json['description'],
-        time = json['time'],
-        image = json['image'];
-
-  Map<String, dynamic> toJson() => {
-        'description': description,
-        'time': time,
-        'image': image,
-      };
+      : description = json['description'].toString(),
+        time = json['time'].toString(),
+        image = json['image'].toString();
 }

@@ -1,3 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shipment/config/api/service.dart';
@@ -5,8 +9,8 @@ import 'package:shipment/models/shipment_model.dart';
 import 'package:shipment/utils/helper.dart';
 
 class Shipments extends StatefulWidget {
-  final String? trackingNumber;
-  const Shipments({super.key, this.trackingNumber});
+  final String trackingNumber;
+  const Shipments({super.key, required this.trackingNumber});
 
   @override
   State<Shipments> createState() => _ShipmentsState();
@@ -36,34 +40,12 @@ class _ShipmentsState extends State<Shipments> {
         shipment = result;
       });
     } catch (e) {
-      setState(() {
-        shipment = ShipmentModel(
-          id: 'SP123456789',
-          status: 'ON DELIVERY',
-          item: 'Sangkar Burung',
-          expedition: 'SPX Express',
-          history: [
-            ShipmentHistoryModel(
-              description: 'Shipment has been delivered',
-              time: '2023-10-04T12:00:00Z',
-              image:
-                  'https://down-my.img.susercontent.com/file/my-11134207-7qukz-lhcxlofew2wded',
-            ),
-            ShipmentHistoryModel(
-              description: 'Shipment is out for delivery',
-              time: '2023-10-03T12:00:00Z',
-            ),
-            ShipmentHistoryModel(
-              description: 'Shipment is in transit',
-              time: '2023-10-02T12:00:00Z',
-            ),
-            ShipmentHistoryModel(
-              description: 'Shipment has been picked up',
-              time: '2023-10-01T12:00:00Z',
-            ),
-          ],
-        );
-      });
+      log(e.toString(), name: 'Shipment Search Error');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Shipment not found'),
+        ),
+      );
     } finally {
       setState(() {
         loading = false;
@@ -74,7 +56,7 @@ class _ShipmentsState extends State<Shipments> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (widget.trackingNumber != null) {
+      if (widget.trackingNumber.isNotEmpty) {
         searchShipment();
       } else {
         Navigator.pop(context);
@@ -171,10 +153,11 @@ class _ShipmentsState extends State<Shipments> {
                   padding: const EdgeInsets.symmetric(
                     vertical: 8,
                   ),
-                  itemCount: shipment?.history.length ?? 0,
+                  reverse: true,
+                  itemCount: shipment?.history?.length ?? 0,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    final history = shipment?.history[index];
+                    final history = shipment?.history?[index];
                     return Container(
                       padding: const EdgeInsets.symmetric(
                         vertical: 8,
@@ -224,7 +207,8 @@ class _ShipmentsState extends State<Shipments> {
                                   ),
                                 ),
                                 const SizedBox(height: 4),
-                                if (history?.image != null) ...[
+                                if (history?.image != null &&
+                                    isValidUrl(history?.image ?? '')) ...[
                                   const SizedBox(height: 4),
                                   Text(
                                     'Proof of delivery:',

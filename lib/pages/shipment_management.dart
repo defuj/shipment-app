@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:shipment/config/api/service.dart';
 import 'package:shipment/config/routes.dart';
@@ -14,7 +16,6 @@ class _ShipmentManagementState extends State<ShipmentManagement> {
   final apiServices = ApiServices();
   bool isLoading = true;
   List<ShipmentModel> shipments = [];
-  String? errorMessage;
 
   Future<void> loadShipments() async {
     if (!isLoading) {
@@ -29,23 +30,7 @@ class _ShipmentManagementState extends State<ShipmentManagement> {
         shipments = result;
       });
     } catch (e) {
-      setState(() {
-        errorMessage = e.toString();
-        shipments = [
-          ShipmentModel(
-            id: 'JNT09864554',
-            item: 'Kadang Marmut',
-            expedition: 'JNT Express',
-            status: 'IN PROCESS',
-          ),
-          ShipmentModel(
-            id: 'JNT09862323',
-            item: 'Buku Pintar',
-            expedition: 'JNT Express',
-            status: 'ON DELIVERY',
-          ),
-        ];
-      });
+      log('Error: $e', name: 'shipmentManagement');
     } finally {
       setState(() {
         isLoading = false;

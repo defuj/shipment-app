@@ -9,3 +9,11 @@ String formatDate({required String date, required String format}) {
     return 'Invalid date';
   }
 }
+
+bool isValidUrl(String url) {
+  final RegExp regex = RegExp(
+    r'^(https?:\/\/)?([a-z0-9-]+\.)+[a-z]{2,}(:\d+)?(\/[^\s]*)?$',
+    caseSensitive: false,
+  );
+  return regex.hasMatch(url);
+}

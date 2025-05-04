@@ -26,11 +26,6 @@ class _UpdateShipmentState extends State<UpdateShipment> {
     'FINISHED'
   ];
   String? selectedStatus;
-  XFile? photoCaptured;
-
-  void takePicture() async {
-    photoCaptured = await picker.pickImage(source: ImageSource.camera);
-  }
 
   void updateStatus() async {
     if (selectedStatus == null) {
@@ -47,10 +42,11 @@ class _UpdateShipmentState extends State<UpdateShipment> {
     });
 
     try {
-      if (await apiServices.updateShipment(
+      var result = await apiServices.updateShipment(
         id: widget.shipment.id,
         status: selectedStatus!,
-      )) {
+      );
+      if (result) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Shipment status updated successfully'),
@@ -92,43 +88,23 @@ class _UpdateShipmentState extends State<UpdateShipment> {
     });
 
     try {
-      if (photoCaptured != null) {
-        if (await apiServices.addHistoryWithImage(
-          id: widget.shipment.id,
-          description: historyDescriptionController.text,
-          imagePath: photoCaptured!.path,
-        )) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('History added successfully'),
-            ),
-          );
-          Navigator.pop(context);
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Failed to add history'),
-            ),
-          );
-        }
+      var result = await apiServices.addHistory(
+        id: widget.shipment.id,
+        description: historyDescriptionController.text,
+      );
+      if (result) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('History added successfully'),
+          ),
+        );
+        Navigator.pop(context);
       } else {
-        if (await apiServices.addHistory(
-          id: widget.shipment.id,
-          description: historyDescriptionController.text,
-        )) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('History added successfully'),
-            ),
-          );
-          Navigator.pop(context);
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Failed to add history'),
-            ),
-          );
-        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Failed to add history'),
+          ),
+        );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -157,7 +133,8 @@ class _UpdateShipmentState extends State<UpdateShipment> {
       isLoading = true;
     });
     try {
-      if (await apiServices.deleteShipments(widget.shipment.id)) {
+      var result = await apiServices.deleteShipments(widget.shipment.id);
+      if (result) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Shipment deleted successfully'),
@@ -298,20 +275,6 @@ class _UpdateShipmentState extends State<UpdateShipment> {
           border: OutlineInputBorder(),
         ),
         controller: historyDescriptionController,
-      ),
-      const SizedBox(height: 16),
-      TextField(
-        decoration: InputDecoration(
-          labelText: 'Photo',
-          border: OutlineInputBorder(),
-        ),
-        readOnly: true,
-        onTap: () {
-          takePicture();
-        },
-        controller: TextEditingController(
-          text: photoCaptured?.path ?? 'Take a picture',
-        ),
       ),
       const SizedBox(height: 16),
       ElevatedButton(

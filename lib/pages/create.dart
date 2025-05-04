@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:shipment/config/api/service.dart';
 import 'package:shipment/config/routes.dart';
@@ -23,7 +25,7 @@ class _CreateShipmentState extends State<CreateShipment> {
     'Grab Express',
     'Gojek'
   ];
-  String status = 'ON PROCESS';
+  String status = 'IN PROCESS';
   final TextEditingController itemDescriptionController =
       TextEditingController();
   String? selectedExpedition;
@@ -48,11 +50,17 @@ class _CreateShipmentState extends State<CreateShipment> {
 
     // Add your create logic here
     try {
-      if (await apiServices.createShipment(
+      var result = await apiServices.createShipment(
         item: itemDescriptionController.text,
         expedition: selectedExpedition!,
         status: status,
-      )) {
+      );
+      if (result) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Shipment created successfully'),
+          ),
+        );
         Navigator.pushNamed(context, Routes.shipmentManagement);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -60,22 +68,15 @@ class _CreateShipmentState extends State<CreateShipment> {
             content: Text('Failed to create shipment'),
           ),
         );
-        return;
       }
     } catch (e) {
+      log(e.toString(), name: 'Create Shipment Error');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Failed to create shipment'),
         ),
       );
-      return;
     }
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Shipment created successfully'),
-      ),
-    );
   }
 
   @override
