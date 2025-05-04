@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:shipment/config/api/service.dart';
 import 'package:shipment/models/shipment_model.dart';
 
@@ -14,7 +13,6 @@ class UpdateShipment extends StatefulWidget {
 }
 
 class _UpdateShipmentState extends State<UpdateShipment> {
-  final picker = ImagePicker();
   final historyDescriptionController = TextEditingController();
   final apiServices = ApiServices();
   bool isLoading = false;

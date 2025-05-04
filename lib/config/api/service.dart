@@ -16,15 +16,6 @@ class ApiServices {
   ApiServices() {
     options = getOptions();
     dio = Dio(options);
-    // dio.interceptors.add(HttpFormatter());
-    // dio.httpClientAdapter = IOHttpClientAdapter(
-    //   createHttpClient: () {
-    //     final client = HttpClient()
-    //       ..badCertificateCallback =
-    //           (X509Certificate cert, String host, int port) => true;
-    //     return client;
-    //   },
-    // );
   }
 
   BaseOptions getOptions() => Dio().options
