@@ -32,6 +32,75 @@ class _SearchState extends State<Search> {
     );
   }
 
+  Widget buildSearchForm() {
+    return Container(
+      width: 300,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.white,
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 5.0,
+            spreadRadius: 1.0,
+            offset: Offset(0.0, 0.0),
+          ),
+        ],
+      ),
+      child: TextFormField(
+        controller: trackingNumberController,
+        style: const TextStyle(
+          fontSize: 16,
+          color: Colors.black,
+        ),
+        maxLength: 10,
+        keyboardType: TextInputType.text,
+        textInputAction: TextInputAction.done,
+        textCapitalization: TextCapitalization.characters,
+        decoration: InputDecoration(
+          counterText: '',
+          hintText: 'Enter your tracking number',
+          suffixIcon: trackingNumber.isNotEmpty
+              ? IconButton(
+                  icon: const Icon(Icons.clear),
+                  onPressed: () {
+                    setState(() {
+                      trackingNumberController.clear();
+                      trackingNumber = '';
+                    });
+                  },
+                )
+              : null,
+          hintStyle: const TextStyle(
+            fontSize: 16,
+            color: Colors.black38,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(
+              color: Colors.transparent,
+              width: 0.0,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(
+              color: Colors.transparent,
+              width: 0.0,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(
+              color: Colors.transparent,
+              width: 0.0,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -74,72 +143,7 @@ class _SearchState extends State<Search> {
             ),
             const SizedBox(height: 20),
             // input field for tracking number
-            Container(
-              width: 300,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white,
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 5.0,
-                    spreadRadius: 1.0,
-                    offset: Offset(0.0, 0.0),
-                  ),
-                ],
-              ),
-              child: TextFormField(
-                controller: trackingNumberController,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.black,
-                ),
-                maxLength: 10,
-                keyboardType: TextInputType.text,
-                textInputAction: TextInputAction.done,
-                textCapitalization: TextCapitalization.characters,
-                decoration: InputDecoration(
-                  counterText: '',
-                  hintText: 'Enter your tracking number',
-                  suffixIcon: trackingNumber.isNotEmpty
-                      ? IconButton(
-                          icon: const Icon(Icons.clear),
-                          onPressed: () {
-                            setState(() {
-                              trackingNumberController.clear();
-                              trackingNumber = '';
-                            });
-                          },
-                        )
-                      : null,
-                  hintStyle: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.black38,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(
-                      color: Colors.transparent,
-                      width: 0.0,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(
-                      color: Colors.transparent,
-                      width: 0.0,
-                    ),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(
-                      color: Colors.transparent,
-                      width: 0.0,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            buildSearchForm(),
             const SizedBox(height: 20),
             ElevatedButton(
               style: ElevatedButton.styleFrom(

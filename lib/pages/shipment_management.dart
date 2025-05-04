@@ -38,13 +38,7 @@ class _ShipmentManagementState extends State<ShipmentManagement> {
     }
   }
 
-  @override
-  void initState() {
-    loadShipments();
-    super.initState();
-  }
-
-  Widget handleLoading() {
+  Widget buildLoading() {
     return Center(
       child: CircularProgressIndicator(
         color: Colors.lightBlue,
@@ -52,7 +46,7 @@ class _ShipmentManagementState extends State<ShipmentManagement> {
     );
   }
 
-  Widget handleEmpty() {
+  Widget buildEmpty() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -81,7 +75,7 @@ class _ShipmentManagementState extends State<ShipmentManagement> {
     );
   }
 
-  Widget handleShipments() {
+  Widget buildList() {
     return ListView.builder(
       itemCount: shipments.length,
       shrinkWrap: true,
@@ -120,6 +114,12 @@ class _ShipmentManagementState extends State<ShipmentManagement> {
   }
 
   @override
+  void initState() {
+    loadShipments();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -136,10 +136,10 @@ class _ShipmentManagementState extends State<ShipmentManagement> {
         ),
       ),
       body: isLoading
-          ? handleLoading()
+          ? buildLoading()
           : shipments.isEmpty
-              ? handleEmpty()
-              : handleShipments(),
+              ? buildEmpty()
+              : buildList(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue,
         onPressed: () {

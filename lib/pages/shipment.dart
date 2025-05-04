@@ -1,9 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shipment/config/api/service.dart';
 import 'package:shipment/models/shipment_model.dart';
 import 'package:shipment/utils/helper.dart';
@@ -21,17 +19,6 @@ class _ShipmentsState extends State<Shipments> {
   ShipmentModel? shipment;
   bool loading = true;
 
-  void copyText(String text) {
-    if (text.isNotEmpty) {
-      Clipboard.setData(ClipboardData(text: text));
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Tracking number copied to clipboard'),
-        ),
-      );
-    }
-  }
-
   Future<void> searchShipment() async {
     try {
       var result =
@@ -41,11 +28,6 @@ class _ShipmentsState extends State<Shipments> {
       });
     } catch (e) {
       log(e.toString(), name: 'Shipment Search Error');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Shipment not found'),
-        ),
-      );
     } finally {
       setState(() {
         loading = false;
@@ -53,25 +35,7 @@ class _ShipmentsState extends State<Shipments> {
     }
   }
 
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (widget.trackingNumber.isNotEmpty) {
-        searchShipment();
-      } else {
-        Navigator.pop(context);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Please enter a tracking number'),
-          ),
-        );
-      }
-    });
-
-    super.initState();
-  }
-
-  Widget handleLoading() {
+  Widget buildLoading() {
     return Center(
       child: CircularProgressIndicator(
         color: Colors.lightBlue,
@@ -139,7 +103,10 @@ class _ShipmentsState extends State<Shipments> {
                         ),
                       ),
                       IconButton(
-                        onPressed: () => copyText(shipment?.id ?? ''),
+                        onPressed: () => copyText(
+                          context: context,
+                          text: shipment?.id ?? '',
+                        ),
                         icon: const Icon(Icons.copy, size: 14),
                       )
                     ],
@@ -242,7 +209,7 @@ class _ShipmentsState extends State<Shipments> {
     );
   }
 
-  Widget handleEmpty() {
+  Widget buildEmpty() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -266,6 +233,24 @@ class _ShipmentsState extends State<Shipments> {
   }
 
   @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.trackingNumber.isNotEmpty) {
+        searchShipment();
+      } else {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please enter a tracking number'),
+          ),
+        );
+      }
+    });
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -282,10 +267,10 @@ class _ShipmentsState extends State<Shipments> {
       ),
       backgroundColor: shipment == null ? Colors.white : Colors.grey[100],
       body: loading
-          ? handleLoading()
+          ? buildLoading()
           : shipment != null
               ? handleShipments()
-              : handleEmpty(),
+              : buildEmpty(),
     );
   }
 }

@@ -117,14 +117,6 @@ class _UpdateShipmentState extends State<UpdateShipment> {
     }
   }
 
-  @override
-  void initState() {
-    setState(() {
-      selectedStatus = widget.shipment.status;
-    });
-    super.initState();
-  }
-
   Future<void> deleteShipment() async {
     // show confirm dialog
     setState(() {
@@ -159,7 +151,7 @@ class _UpdateShipmentState extends State<UpdateShipment> {
     }
   }
 
-  Widget handleLoading() {
+  Widget buildLoading() {
     return Center(
       child: CircularProgressIndicator(
         color: Colors.lightBlue,
@@ -167,7 +159,7 @@ class _UpdateShipmentState extends State<UpdateShipment> {
     );
   }
 
-  Widget handleEmpty() {
+  Widget buildEmpty() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -299,6 +291,14 @@ class _UpdateShipmentState extends State<UpdateShipment> {
       ),
       const SizedBox(height: 16),
     ];
+  }
+
+  @override
+  void initState() {
+    setState(() {
+      selectedStatus = widget.shipment.status;
+    });
+    super.initState();
   }
 
   @override
