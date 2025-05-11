@@ -232,27 +232,11 @@ class _UpdateShipmentState extends State<UpdateShipment> {
         },
       ),
       const SizedBox(height: 16),
-      ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 16,
-          ),
-          backgroundColor: Colors.blue,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
+      buildButton(
+        title: 'Update Status',
         onPressed: () {
           updateStatus();
         },
-        child: const Text(
-          'Update Status',
-          style: TextStyle(
-            fontSize: 16,
-            color: Colors.white,
-          ),
-        ),
       ),
       const SizedBox(height: 16),
     ];
