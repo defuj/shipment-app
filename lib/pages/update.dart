@@ -152,14 +152,6 @@ class _UpdateShipmentState extends State<UpdateShipment> {
     }
   }
 
-  Widget buildLoading() {
-    return Center(
-      child: CircularProgressIndicator(
-        color: Colors.lightBlue,
-      ),
-    );
-  }
-
   Widget buildEmpty() {
     return Center(
       child: Column(

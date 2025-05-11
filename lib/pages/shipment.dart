@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:shipment/components/loading.dart';
 import 'package:shipment/config/api.dart';
 import 'package:shipment/models/shipment_model.dart';
 import 'package:shipment/utils/helper.dart';
@@ -33,14 +34,6 @@ class _ShipmentsState extends State<Shipments> {
         loading = false;
       });
     }
-  }
-
-  Widget buildLoading() {
-    return Center(
-      child: CircularProgressIndicator(
-        color: Colors.lightBlue,
-      ),
-    );
   }
 
   Widget handleShipments() {

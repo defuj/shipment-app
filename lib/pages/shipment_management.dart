@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:shipment/components/loading.dart';
 import 'package:shipment/config/api.dart';
 import 'package:shipment/config/routes.dart';
 import 'package:shipment/models/shipment_model.dart';
@@ -36,14 +37,6 @@ class _ShipmentManagementState extends State<ShipmentManagement> {
         isLoading = false;
       });
     }
-  }
-
-  Widget buildLoading() {
-    return Center(
-      child: CircularProgressIndicator(
-        color: Colors.lightBlue,
-      ),
-    );
   }
 
   Widget buildEmpty() {
@@ -84,7 +77,7 @@ class _ShipmentManagementState extends State<ShipmentManagement> {
         return ListTile(
           leading: const Icon(
             Icons.local_shipping,
-            color: Colors.blue,
+            color: Colors.red,
             size: 40,
           ),
           title: Text(
@@ -95,7 +88,7 @@ class _ShipmentManagementState extends State<ShipmentManagement> {
             ),
           ),
           subtitle: Text(
-            '${shipment.expedition} - ${shipment.status}',
+            '${shipment.expedition} - ${shipment.status}'.toUpperCase(),
             style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w400,
@@ -135,13 +128,13 @@ class _ShipmentManagementState extends State<ShipmentManagement> {
           ),
         ),
       ),
-      body: isLoading
+      body: isLoading == true
           ? buildLoading()
           : shipments.isEmpty
               ? buildEmpty()
               : buildList(),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.red,
         onPressed: () {
           Navigator.pushNamed(context, Routes.shipmentCreate);
         },

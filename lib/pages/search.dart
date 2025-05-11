@@ -13,7 +13,6 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   ShipmentModel? shipment;
   TextEditingController trackingNumberController = TextEditingController();
-  bool isLoading = false;
   String trackingNumber = '';
 
   void searchShipment() {
@@ -120,11 +119,13 @@ class _SearchState extends State<Search> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.asset(
-              'assets/images/tracking.png',
-              width: 300,
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: Image.asset(
+                'assets/images/tracking.png',
+                width: 300,
+              ),
             ),
-            const SizedBox(height: 20),
             const Text(
               'Welcome to Shipment Tracker',
               style: TextStyle(
@@ -147,17 +148,17 @@ class _SearchState extends State<Search> {
             buildSearchForm(),
             const SizedBox(height: 20),
             buildButton(
-              title: 'Search',
-              color: Colors.blue,
               onPressed: () {
                 searchShipment();
               },
+              title: 'Search Here',
+              color: Colors.red,
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.red,
         onPressed: () {
           Navigator.pushNamed(
             context,

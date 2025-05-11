@@ -4,7 +4,7 @@ Widget buildFloatingButton({
   required String title,
   required Widget icon,
   Function? onPressed,
-  Color? color = Colors.blue,
+  Color? color = Colors.red,
 }) {
   return FloatingActionButton(
     backgroundColor: color,

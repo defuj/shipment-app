@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:shipment/models/shipment_model.dart';
 
 class ApiServices {
-  static const String baseUrl = 'http://192.168.18.186:8000';
+  static const String baseUrl = 'http://192.168.18.223:8000';
   static String createHistory(String id) => '/shipment/$id/history';
   static String delete(String id) => '/shipment/$id';
   static String update(String id) => '/shipment/$id';
@@ -38,7 +38,7 @@ class ApiServices {
         ),
       );
 
-      if (response.data['status']) {
+      if (response.data['status'] == true) {
         return Future.value(ShipmentModel.fromJson(response.data['data']));
       } else {
         return Future.error('Shipment not found');

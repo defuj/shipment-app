@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 Widget buildButton({
   required String title,
   Function? onPressed,
-  Color? color = Colors.blue,
+  Color? color = Colors.red,
 }) {
   return ElevatedButton(
     style: ElevatedButton.styleFrom(
