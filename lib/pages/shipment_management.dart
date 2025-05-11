@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:shipment/config/api/service.dart';
+import 'package:shipment/config/api.dart';
 import 'package:shipment/config/routes.dart';
 import 'package:shipment/models/shipment_model.dart';
 

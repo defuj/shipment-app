@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:shipment/config/api/service.dart';
+import 'package:shipment/config/api.dart';
 import 'package:shipment/models/shipment_model.dart';
 
 class UpdateShipment extends StatefulWidget {

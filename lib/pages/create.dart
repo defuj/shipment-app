@@ -3,7 +3,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:shipment/config/api/service.dart';
+import 'package:shipment/config/api.dart';
 import 'package:shipment/config/routes.dart';
 
 class CreateShipment extends StatefulWidget {
