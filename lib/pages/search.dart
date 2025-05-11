@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shipment/components/button.dart';
 import 'package:shipment/config/routes.dart';
 import 'package:shipment/models/shipment_model.dart';
 
@@ -145,25 +146,12 @@ class _SearchState extends State<Search> {
             // input field for tracking number
             buildSearchForm(),
             const SizedBox(height: 20),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 16,
-                ),
-                backgroundColor: Colors.blue,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              onPressed: searchShipment,
-              child: const Text(
-                'Search',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                ),
-              ),
+            buildButton(
+              title: 'Search',
+              color: Colors.blue,
+              onPressed: () {
+                searchShipment();
+              },
             ),
           ],
         ),
