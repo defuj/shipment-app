@@ -1,8 +1,9 @@
+import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
 import 'package:shipment/models/shipment_model.dart';
 
 class ApiServices {
-  static const String baseUrl = 'http://192.168.18.144:8000';
+  static const String baseUrl = 'http://192.168.18.186:8000';
   static String createHistory(String id) => '/shipment/$id/history';
   static String delete(String id) => '/shipment/$id';
   static String update(String id) => '/shipment/$id';
@@ -16,6 +17,7 @@ class ApiServices {
   ApiServices() {
     options = getOptions();
     dio = Dio(options);
+    dio.httpClientAdapter = BrowserHttpClientAdapter();
   }
 
   BaseOptions getOptions() => Dio().options
