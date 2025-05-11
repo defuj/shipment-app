@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:shipment/components/button.dart';
 import 'package:shipment/config/api.dart';
 import 'package:shipment/models/shipment_model.dart';
 
@@ -267,27 +268,11 @@ class _UpdateShipmentState extends State<UpdateShipment> {
         controller: historyDescriptionController,
       ),
       const SizedBox(height: 16),
-      ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 16,
-          ),
-          backgroundColor: Colors.blue,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
+      buildButton(
+        title: 'Add History',
         onPressed: () {
           addHistory();
         },
-        child: const Text(
-          'Add to History',
-          style: TextStyle(
-            fontSize: 16,
-            color: Colors.white,
-          ),
-        ),
       ),
       const SizedBox(height: 16),
     ];

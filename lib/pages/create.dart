@@ -3,6 +3,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:shipment/components/button.dart';
 import 'package:shipment/config/api.dart';
 import 'package:shipment/config/routes.dart';
 
@@ -143,27 +144,11 @@ class _CreateShipmentState extends State<CreateShipment> {
               },
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 16,
-                ),
-                backgroundColor: Colors.blue,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
+            buildButton(
+              title: 'Create Shipment',
               onPressed: () {
                 createShipment();
               },
-              child: const Text(
-                'Create Shipment',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                ),
-              ),
             ),
           ],
         ),
