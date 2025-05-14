@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "812829259045",
+    "project_id": "shipment-app-881a2",
+    "storage_bucket": "shipment-app-881a2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:812829259045:android:86ef4ec316a887296216cc",
+        "android_client_info": {
+          "package_name": "id.co.sadigit.shipment"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdTPxiKzylr_lNuvqkecnNSnON-hiWXwQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
