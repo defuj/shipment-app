@@ -13,7 +13,7 @@ void showNotification(RemoteMessage message) {
   try {
     flutterLocalNotificationsPlugin.initialize(
       const InitializationSettings(
-        android: AndroidInitializationSettings('@mipmap/launcher_icon'),
+        android: AndroidInitializationSettings('@mipmap/ic_launcher'),
       ),
     );
 
@@ -30,8 +30,6 @@ void showNotification(RemoteMessage message) {
             importance: Importance.max,
             priority: Priority.high,
             icon: android.smallIcon,
-            largeIcon:
-                const DrawableResourceAndroidBitmap('@mipmap/launcher_icon'),
           ),
         ),
       );

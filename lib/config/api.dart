@@ -1,4 +1,3 @@
-import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
 import 'package:shipment/models/shipment_model.dart';
 
@@ -17,7 +16,7 @@ class ApiServices {
   ApiServices() {
     options = getOptions();
     dio = Dio(options);
-    dio.httpClientAdapter = BrowserHttpClientAdapter();
+    dio.httpClientAdapter = HttpClientAdapter();
   }
 
   BaseOptions getOptions() => Dio().options
