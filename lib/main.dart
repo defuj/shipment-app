@@ -93,7 +93,7 @@ class _MyAppState extends State<MyApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue),
         useMaterial3: true,
       ),
-      initialRoute: Routes.main,
+      initialRoute: Routes.fcm,
       routes: Routes.routes,
     );
   }
